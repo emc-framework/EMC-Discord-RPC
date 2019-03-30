@@ -1,0 +1,29 @@
+def emcVersion = "13.7.4-1.13.2"
+
+apply plugin: 'java-library'
+
+repositories {
+    mavenCentral()
+    maven { url "https://gitlab.com/EMC-Framework/maven/raw/master/" }
+    maven { url = 'http://repo.spongepowered.org/maven/' }
+	maven { url 'https://libraries.minecraft.net/' }
+	maven { url 'https://www.dimdev.org/maven/' }
+}
+
+configurations {
+	extraLibs
+}
+
+dependencies {
+	compile 'com.google.guava:guava:24.1-jre'
+	compile 'com.google.code.gson:gson:2.8.2'
+	compile "me.deftware:EMC:${emcVersion}"
+	compile "com.github.psnrigner:discord-rpc-java:1.0.4"
+	extraLibs "com.github.psnrigner:discord-rpc-java:1.0.4"
+}
+
+jar {
+    from {
+	    configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
